@@ -1,0 +1,40 @@
+services:
+  ngcash_db:
+    image: postgres
+    container_name: ngcash_db
+    restart: always
+    ports:
+      - 1235:5432
+    env_file:
+      - back-end/.env
+    volumes: 
+      - pg_ngcash_db:/var/lib/postgresql/data
+
+  ngcash_node:
+    container_name: ngcash_node
+    build: .
+    image: ngcash_node
+    ports:
+      - 4000:4000
+    depends_on:
+      - ngcash_db
+    env_file:
+      - .env
+
+  nginx_ngcash:
+    container_name: nginx_ngcash
+    build: ./nginx
+    image: nginx_ngcash
+    ports:
+      - 80:80
+    volumes:
+     - build_react:/var/www/html
+
+    depends_on:
+      - ngcash_db
+      - ngcash_node
+      - react_build
+
+volumes:
+  pg_drivent_db:
+  build_react:

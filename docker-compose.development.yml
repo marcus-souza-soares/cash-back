@@ -1,0 +1,48 @@
+version: '3'
+services:
+
+  ngcash-postgres-development:
+    image: postgres:13-alpine
+    container_name: ngcash-postgres-development
+    env_file:
+      - .env.development
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - ngcash-postgres-data:/var/lib/postgresql/data
+    command: postgres -p ${POSTGRES_PORT}
+
+  ngcash-development:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    container_name: ngcash-development
+    env_file:
+      - .env.development
+    depends_on:
+      - ngcash-postgres-development
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '5'
+    working_dir: /usr/src/ngcash
+    command: bash -c "npx prisma generate && npm run dev"
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./src:/usr/src/ngcash/src
+      - ./prisma:/usr/src/ngcash/prisma
+      - ./.env.development:/usr/src/ngcash/.env.development
+      - ./.eslintrc.js:/usr/src/ngcash/.eslintrc.js
+      - ./.eslintignore:/usr/src/ngcash/.eslintignore
+      - ./.prettierrc.js:/usr/src/ngcash/.prettierrc.js
+      - ./tsconfig.json:/usr/src/ngcash/tsconfig.json
+    ports:
+      - ${PORT}:${PORT}
+volumes:
+  ngcash-postgres-data:
