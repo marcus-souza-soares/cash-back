@@ -16,4 +16,9 @@ async function findAccount(id: number) {
   });
 }
 
+export const accountRepository = {
+  findAccount,
+  createAcconunt
+}
+
 

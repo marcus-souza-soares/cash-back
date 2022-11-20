@@ -1,11 +1,21 @@
-import { prisma } from "../config";
+import { prisma } from "../config/index.js";
 import { User } from "@prisma/client";
 
-export type UserParams = Omit<User, "id">
+export type UserParams = Omit<User, "id" | "accountId">;
 
-async function createUser(user: UserParams) {
-  return prisma.user.create({
-    data: user,
+async function createUser(userBody: UserParams) {
+  return await prisma.$transaction(async (prisma) => {
+    const _account = await prisma.accounts.create({
+      data: {
+        balance: 100,
+      },
+    });
+    await prisma.user.create({
+      data: {
+        ...userBody,
+        accountId: _account.id,
+      },
+    });
   });
 }
 
@@ -24,3 +34,8 @@ async function findUserByUsername(username: string) {
     },
   });
 }
+export const userRepository = {
+  createUser,
+  findUserByCredentials,
+  findUserByUsername,
+};

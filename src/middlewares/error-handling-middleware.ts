@@ -13,7 +13,7 @@ export function handleApplicationErrors(
     });
   }
 
-  if (err.name === 'ConflictError' || err.name === 'DuplicatedEmailError') {
+  if (err.name === 'ConflictError' || err.name === 'DuplicatedUsernameError') {
     return res.status(409).send({
       message: err.message,
     });

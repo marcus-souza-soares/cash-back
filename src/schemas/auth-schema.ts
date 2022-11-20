@@ -1,5 +1,5 @@
 import joi from "joi";
-import { UserParams } from "../repositories";
+import { UserParams } from "../repositories/user-repository.js";
 
 type confirmPassword = {
   confirmPassword: string;

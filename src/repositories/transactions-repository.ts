@@ -3,7 +3,7 @@ import { Transactions } from "@prisma/client";
 
 export type TransactionParams = Omit<Transactions, "id" | "createdAt">
 
-async function creatTrasaction(
+async function createTransaction(
   trasaction: TransactionParams
 ) {
   return prisma.transactions.create({
@@ -24,4 +24,9 @@ async function findTransactionsByUser(accountId: number) {
       ],
     },
   });
+}
+
+export const transactionRepository = {
+  findTransactionsByUser,
+  createTransaction
 }
