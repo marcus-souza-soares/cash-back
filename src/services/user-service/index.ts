@@ -45,3 +45,8 @@ async function validatePasswordOrFail(password: string, userPassword: string) {
   const isPasswordValid = await bcrypt.compare(password, userPassword);
   if (!isPasswordValid) throw invalidCredentialsError();
 }
+
+export async function searchList(username: string) {
+  if (!username) return userRepository.getUsers();
+  return await userRepository.searchList(username);
+}

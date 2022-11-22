@@ -1,15 +1,18 @@
-import { NextFunction, Request, Response } from 'express';
-import * as jwt from 'jsonwebtoken';
+import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 
-import { unauthorizedError } from '../errors';
+import { unauthorizedError } from "../errors/index.js";
 
-export async function authenticateToken(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  const authHeader = req.header('Authorization');
+export async function authenticateToken(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  const authHeader = req.header("x-acess-token");
   if (!authHeader) return generateUnauthorizedResponse(res);
 
-  const token = authHeader.split(' ')[1];
+  const token = authHeader.split(" ")[1];
   if (!token) return generateUnauthorizedResponse(res);
-
   try {
     const { userId } = jwt.verify(token, process.env.JWT_SECRET) as JWTPayload;
 
@@ -19,6 +22,7 @@ export async function authenticateToken(req: AuthenticatedRequest, res: Response
 
     return next();
   } catch (err) {
+    console.error(err);
     return generateUnauthorizedResponse(res);
   }
 }

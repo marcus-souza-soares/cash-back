@@ -1,4 +1,4 @@
-import { ApplicationError } from '../protocol';
+import { ApplicationError } from '../protocol.js';
 import { NextFunction, Request, Response } from 'express';
 
 export function handleApplicationErrors(

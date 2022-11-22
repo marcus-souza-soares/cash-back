@@ -6,7 +6,7 @@ import { loadEnv } from "./config/envs.js";
 import { connectDb, disconnectDB } from "./config/database.js";
 import { handleApplicationErrors } from "./middlewares/error-handling-middleware.js";
 
-import { userRoutes } from "./routes/index.js"
+import { userRoutes, accountRouter } from "./routes/index.js"
 
 loadEnv();
 
@@ -16,6 +16,7 @@ app
   .use(cors())
   .use(express.json())
   .use("/user", userRoutes)
+  .use("/account", accountRouter)
   .use(handleApplicationErrors);
 
 export function init(): Promise<Express> {

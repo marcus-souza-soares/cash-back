@@ -1,5 +1,5 @@
 import { prisma } from "../config/index.js";
-import { User } from "@prisma/client";
+import { PrismaPromise, User } from "@prisma/client";
 
 export type UserParams = Omit<User, "id" | "accountId">;
 
@@ -34,7 +34,31 @@ async function findUserByUsername(username: string) {
     },
   });
 }
+
+async function searchList(name: string) {
+  return await prisma.user.findMany({
+    where: {
+      username: {
+        contains: name,
+        mode: "insensitive",
+      },
+    },
+    take: 10,
+    orderBy: {
+      username: "asc",
+    },
+  });
+}
+
+async function getUsers() {
+  return await prisma.user.findMany({
+    take: 10,
+  });
+}
+
 export const userRepository = {
+  getUsers,
+  searchList,
   createUser,
   findUserByCredentials,
   findUserByUsername,

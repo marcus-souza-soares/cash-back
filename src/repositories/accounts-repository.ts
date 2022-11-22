@@ -1,4 +1,4 @@
-import { prisma } from "../config";
+import { prisma } from "../config/index.js";
 
 async function createAcconunt(defaultBalance = 100) {
   return prisma.accounts.create({
