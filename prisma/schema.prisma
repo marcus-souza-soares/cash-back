@@ -34,5 +34,5 @@ model Transactions {
   debited           Accounts @relation("debited", fields: [debitedAccountId], references: [id])
   credited          Accounts @relation("credited", fields: [creditedAccountId], references: [id])
   value             Float
-  createdAt         DateTime @default(now())
+  createdAt         DateTime @default(now()) 
 }

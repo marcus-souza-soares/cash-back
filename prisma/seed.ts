@@ -9,7 +9,7 @@ let cont: number = 0;
 
 while (cont < 4) {
   const _newUser: UserParams = {
-    username: "@" + faker.internet.userName(),
+    username: faker.internet.userName(),
     password: faker.internet.password(10),
   };
   userList.push(_newUser);
@@ -20,8 +20,10 @@ async function seed(): Promise<void> {
   userList.forEach(async (u) => {
     await userRepository.createUser(u);
   });
+  await userRepository.createUser({
+    username: "Mariana Gonçalves",
+    password: faker.internet.password(),
+  });
 }
 
 seed();
-
-

@@ -35,6 +35,10 @@ async function getUserOrFail(username: string) {
   return user;
 }
 
+export async function getUserById(userId: number) {
+  return userRepository.findUserById(userId);
+}
+
 async function createSession(userId: number) {
   const config = { expiresIn: process.env.EXPIRES_TOKEN || "24h" };
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, config);
@@ -46,7 +50,8 @@ async function validatePasswordOrFail(password: string, userPassword: string) {
   if (!isPasswordValid) throw invalidCredentialsError();
 }
 
-export async function searchList(username: string) {
+export async function searchList(username: string, userId: number) {
   if (!username) return userRepository.getUsers();
-  return await userRepository.searchList(username);
+  const result = await userRepository.searchList(username);
+  return result.filter((e) => e.id !== userId);
 }

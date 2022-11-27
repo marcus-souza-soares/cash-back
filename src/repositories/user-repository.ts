@@ -34,6 +34,13 @@ async function findUserByUsername(username: string) {
     },
   });
 }
+async function findUserById(id: number) {
+  return prisma.user.findUnique({
+    where: {
+      id,
+    },
+  });
+}
 
 async function searchList(name: string) {
   return await prisma.user.findMany({
@@ -46,6 +53,11 @@ async function searchList(name: string) {
     take: 10,
     orderBy: {
       username: "asc",
+    },
+    select: {
+      username: true,
+      accountId: true,
+      id: true,
     },
   });
 }
@@ -62,4 +74,5 @@ export const userRepository = {
   createUser,
   findUserByCredentials,
   findUserByUsername,
+  findUserById,
 };

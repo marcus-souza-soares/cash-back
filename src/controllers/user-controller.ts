@@ -16,6 +16,7 @@ export async function signIn(req: Request, res: Response) {
 
 export async function searchList(req: Request, res: Response) {
   const { username } = req.params;
-  const result = await userService.searchList(username);
+  const { userId } = res.locals;
+  const result = await userService.searchList(username, userId);
   res.status(200).send(result);
 }
